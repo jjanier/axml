@@ -1,0 +1,37 @@
+AXML Parser and AXML Printer
+https://github.com/claudxiao/AndTools
+
+--- Introduction ---
+
+AXML Parser is used to parse the binary XML format used by Android devices (which is called AXML format). It's writen by ANSI C language. It provides a pull parse interface to user, and provides a simple function(AxmlToXml) to convert AXML format into XML format.
+
+AXML Printer is an example of how to use AXML Parser, and is also an useful tools to transform AXML files into plain XML format.
+
+--- Linux ---
+Build:
+	# make
+Test:
+	# ./AxmlPrinter test.xml
+
+--- Windows ---
+Mircosoft Visual Studio 2008(9.0) or above version is requird.
+Build:
+	1. Double click the file 'win32/AxmlPrinter.sln', open Visual Studio 2008;
+	2. On the 'Standard' toolbar, choose 'Release' from the 'Solution Configurations' list box;
+	3. On the 'Build' menu, click 'Build Solution';
+Test:
+	1. After build, you will find 'AxmlPrinter.exe' in the root directory.
+	2. In cmd.exe, type 'AxmlPrinter.exe test.xml'
+
+--- Acknowledgement ---
+In order to understand the AXML format and writen this code, I mainly refer these project:
+android4me:
+	http://code.google.com/p/android4me/
+androguard:
+	http://code.google.com/p/androguard/
+More over, I'd like to appreciate DemonHunter.
+
+--- Author ---
+Claud Xiao
+iClaudXiao@gmail.com
+http://www.ClaudXiao.net
