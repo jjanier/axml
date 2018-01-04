@@ -1,5 +1,7 @@
 AXML Parser and AXML Printer
-https://github.com/claudxiao/AndTools
+Original code from : https://github.com/claudxiao/AndTools
+
+Added support for both UTF8 & UTF16 as Parsing UTF8 with original parser was failing.
 
 --- Introduction ---
 
@@ -31,7 +33,9 @@ androguard:
 	http://code.google.com/p/androguard/
 More over, I'd like to appreciate DemonHunter.
 
---- Author ---
+--- Authors ---
 Claud Xiao
 iClaudXiao@gmail.com
 http://www.ClaudXiao.net
+
+Julien Janier
