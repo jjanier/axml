@@ -110,6 +110,7 @@ typedef struct {
 	uint32_t text;		/* when tag is text, its content */
 
 	AttrStack_t *attr;	/* attributes */
+	AxmlEvent_t event;
 } Parser_t;
 
 #define UTF8_FLAG (1 << 8)
@@ -315,6 +316,7 @@ AxmlOpen(char *buffer, size_t size)
 	ap->tagName = (uint32_t)(-1);
 	ap->tagUri = (uint32_t)(-1);
 	ap->text = (uint32_t)(-1);
+	ap->event = (AxmlEvent_t)(-1);
 
 	ap->st = (StringTable_t *)malloc(sizeof(StringTable_t));
 	if(ap->st == NULL)
@@ -377,26 +379,23 @@ AxmlClose(void *axml)
 AxmlEvent_t
 AxmlNext(void *axml)
 {
-	static AxmlEvent_t event = -1;
-
 	Parser_t *ap;
 	uint32_t chunkType;
 
-	/* when init */
-	if(event == -1)
-	{
-		event = AE_STARTDOC;
-		return event;
-	}
-
 	ap = (Parser_t *)axml;
 
+	/* when init */
+	if(ap->event == -1)
+	{
+		ap->event = AE_STARTDOC;
+		return ap->event;
+	}
 	/* when buffer ends */
 	if(NoMoreData(ap))
-		event = AE_ENDDOC;
+		ap->event = AE_ENDDOC;
 
-	if(event == AE_ENDDOC)
-		return event;
+	if(ap->event == AE_ENDDOC)
+		return ap->event;
 
 	/* common chunk head */
 	chunkType = GetInt32(ap);
@@ -446,7 +445,7 @@ AxmlNext(void *axml)
 		attr->next = ap->attr;
 		ap->attr = attr;
 
-		event = AE_STARTTAG;
+		ap->event = AE_STARTTAG;
 	}
 	else if(chunkType == CHUNK_ENDTAG)
 	{
@@ -464,7 +463,7 @@ AxmlNext(void *axml)
 			free(attr);
 		}
 
-		event = AE_ENDTAG;
+		ap->event = AE_ENDTAG;
 	}
 	else if(chunkType == CHUNK_STARTNS)
 	{
@@ -508,14 +507,14 @@ AxmlNext(void *axml)
 	{
 		ap->text = GetInt32(ap);
 		SkipInt32(ap, 2);	/* unknown fields */
-		event = AE_TEXT;
+		ap->event = AE_TEXT;
 	}
 	else
 	{
-		event = AE_ERROR;
+		ap->event = AE_ERROR;
 	}
 
-	return event;
+	return ap->event;
 }
 
 /** \brief Convert UTF-16LE string into UTF-8 string
