@@ -615,19 +615,20 @@ GetString(Parser_t *ap, uint32_t id)
 	if (isUTF8) {
 		size = *(uint8_t *)offset;
 		chNum = *(uint8_t *)(offset+1);
-		ap->st->strings[id] = (unsigned char *)malloc(chNum);
+		ap->st->strings[id] = (unsigned char *)malloc(chNum + 1);
 		memcpy(ap->st->strings[id], offset+2, chNum);
-//		ap->st->strings[id][chNum] = 0;
+		ap->st->strings[id][chNum] = 0;
 	} else {
 		chNum = *(uint16_t *)offset;
 		size = UTF16LEtoUTF8(NULL, offset+2, (size_t)chNum);
 		if(size == (size_t)-1)
 			return emptyString;
-		ap->st->strings[id] = (unsigned char *)malloc(size);
+		ap->st->strings[id] = (unsigned char *)malloc(size + 1);
 		if(ap->st->strings[id] == NULL)
 			return emptyString;
 
 		UTF16LEtoUTF8(ap->st->strings[id], offset+2, (size_t)chNum);
+		ap->st->strings[id][size] = 0;
 	}
 
 
